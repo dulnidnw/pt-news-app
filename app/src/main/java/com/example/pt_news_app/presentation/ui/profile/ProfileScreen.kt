@@ -42,7 +42,7 @@ fun ProfileScreen(navController: NavController) {
 
     Scaffold(
         bottomBar = {
-            BottomNavigationBar(navController)
+            BottomNavBar(navController)
         },
         containerColor = lightGray
     ) { padding ->
