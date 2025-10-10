@@ -81,8 +81,7 @@ fun LoginScreen(
         Button(
             onClick = {
                 if (email.isNotBlank() && password.isNotBlank()) {
-                    // TODO: Replace with your actual login check
-                    onLoginSuccess() // 🔹 navigate to home
+                    onLoginSuccess()
                 } else {
                     Toast.makeText(
                         context,
