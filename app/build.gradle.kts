@@ -4,8 +4,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.ksp) // ✅ KSP enabled
-    alias(libs.plugins.hilt) // ✅ Hilt enabled
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -32,7 +32,6 @@ android {
         }
     }
 
-    // ⚠️ AGP 8.x expects JDK 17. Kotlin 2.2.x also plays best with 17.
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -53,7 +52,6 @@ android {
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
     arg("room.generateKotlin", "true")
-    // arg("room.incremental", "true") // optional
 }
 
 
@@ -72,28 +70,31 @@ dependencies {
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui)
 
-    // ✅ Room + KSP
+    // Room + KSP
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
 
-    // ✅ Networking
+    // Networking
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson.converter)
     implementation(libs.gson)
 
-    // ✅ Image Loading
+    // Image Loading
     implementation(libs.coil)
     implementation(libs.coil.compose)
 
-    // ✅ Dependency Injection
+    // Dependency Injection
     implementation(libs.dagger)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
     ksp(libs.dagger.compiler)
     ksp(libs.hilt.compiler)
+
+    implementation(libs.compose.material.icons.core)
+    implementation(libs.compose.material.icons.extended)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

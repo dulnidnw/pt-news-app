@@ -1,6 +1,5 @@
-package com.example.pt_news_app.ui.auth
+package com.example.pt_news_app.presentation.ui.signup
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +14,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -26,12 +26,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import android.widget.Toast
+import android.util.Patterns
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.pt_news_app.R
-import com.example.pt_news_app.ui.NavRoutes
+import com.example.pt_news_app.presentation.navigation.NavRoutes
 
 @Composable
-fun SignUpScreen(navController: NavController) {
+fun SignUpScreen(
+    navController: NavController,
+    viewModel: SignupViewModel = viewModel(factory = signUpVmFactory())
+) {
+
+    val uiState by viewModel.ui.collectAsState()
     var firstName by remember {
         mutableStateOf("")
     }
@@ -56,8 +64,9 @@ fun SignUpScreen(navController: NavController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        OutlinedTextField(value = "firstName", onValueChange = {
+        OutlinedTextField(value = firstName, onValueChange = {
             firstName = it
+            viewModel.onFirstName(it)
         }, label = {
             Text(text = "First Name")
         })
@@ -65,8 +74,9 @@ fun SignUpScreen(navController: NavController) {
             modifier = Modifier
                 .padding(5.dp)
         )
-        OutlinedTextField(value = "lastName", onValueChange = {
+        OutlinedTextField(value = lastName, onValueChange = {
             lastName = it
+            viewModel.onLastName(it)
         }, label = {
             Text(text = "Last Name")
         })
@@ -75,8 +85,9 @@ fun SignUpScreen(navController: NavController) {
                 .padding(5.dp)
         )
 
-        OutlinedTextField(value = "email", onValueChange = {
+        OutlinedTextField(value = email, onValueChange = {
             email = it
+            viewModel.onEmail(it)
         }, label = {
             Text(text = "Email")
         })
@@ -84,8 +95,9 @@ fun SignUpScreen(navController: NavController) {
             modifier = Modifier
                 .padding(5.dp)
         )
-        OutlinedTextField(value = "password", onValueChange = {
+        OutlinedTextField(value = password, onValueChange = {
             password = it
+            viewModel.onPassword(it)
         }, label = {
             Text(text = "Password")
         }, visualTransformation = PasswordVisualTransformation())
@@ -93,8 +105,9 @@ fun SignUpScreen(navController: NavController) {
             modifier = Modifier
                 .padding(5.dp)
         )
-        OutlinedTextField(value = "confirmPassword", onValueChange = {
+        OutlinedTextField(value = confirmPassword, onValueChange = {
             confirmPassword = it
+            viewModel.onConfirm(it)
         }, label = {
             Text(text = "Confirm Password")
         }, visualTransformation = PasswordVisualTransformation())
@@ -104,7 +117,22 @@ fun SignUpScreen(navController: NavController) {
         )
         Button(
             onClick = {
-                Log.i("Credentials", "Email: $email Password $password")
+                // Validation
+                if (firstName.isBlank() || lastName.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
+                    Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
+                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    Toast.makeText(context, "Please enter a valid email", Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
+                if (password != confirmPassword) {
+                    Toast.makeText(context, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
+
+                viewModel.submit()
+
             }, modifier = Modifier
                 .size(100.dp, 50.dp)
         ) {
@@ -133,12 +161,22 @@ fun SignUpScreen(navController: NavController) {
                 modifier = Modifier
                     .clickable {
                         navController.navigate(NavRoutes.screenLogin)
-//                        val intent = Intent(context, SignUpActivity::class.java)
-//                        context.startActivity(intent)
                     }
             )
         }
 
+    }
+
+    if (uiState.createdUser != null && uiState.error == null && !uiState.isLoading) {
+        firstName = ""
+        lastName = ""
+        email = ""
+        password = ""
+        confirmPassword = ""
+        Toast.makeText(context, "Sign up complete", Toast.LENGTH_SHORT).show()
+        navController.navigate(NavRoutes.screenLogin) {
+            popUpTo(NavRoutes.screenLogin) { inclusive = true }
+        }
     }
 
 }

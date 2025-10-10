@@ -1,6 +1,6 @@
-package com.example.pt_news_app.ui.auth
+package com.example.pt_news_app.presentation.ui.login
 
-import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,20 +28,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.pt_news_app.R
-import com.example.pt_news_app.ui.NavRoutes
+import com.example.pt_news_app.presentation.navigation.NavRoutes
 
 @Composable
-fun LoginScreen(navController: NavController) {
-    var email by remember {
-        mutableStateOf("")
-    }
-    var password by remember {
-        mutableStateOf("")
-    }
+fun LoginScreen(
+    navController: NavController,
+    viewModel: LoginViewModel = viewModel(),
+    onLoginSuccess: () -> Unit
+) {
     val context = LocalContext.current
-
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -59,7 +59,7 @@ fun LoginScreen(navController: NavController) {
             modifier = Modifier
                 .padding(5.dp)
         )
-        OutlinedTextField(value = "email", onValueChange = {
+        OutlinedTextField(value = email, onValueChange = {
             email = it
         }, label = {
             Text(text = "Email")
@@ -68,7 +68,7 @@ fun LoginScreen(navController: NavController) {
             modifier = Modifier
                 .padding(5.dp)
         )
-        OutlinedTextField(value = "password", onValueChange = {
+        OutlinedTextField(value = password, onValueChange = {
             password = it
         }, label = {
             Text(text = "Password")
@@ -77,9 +77,19 @@ fun LoginScreen(navController: NavController) {
             modifier = Modifier
                 .padding(5.dp)
         )
+
         Button(
             onClick = {
-                Log.i("Credentials", "Email: $email Password $password")
+                if (email.isNotBlank() && password.isNotBlank()) {
+                    // TODO: Replace with your actual login check
+                    onLoginSuccess() // 🔹 navigate to home
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Please enter email and password",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }, modifier = Modifier
                 .size(100.dp, 50.dp)
         ) {
@@ -89,7 +99,6 @@ fun LoginScreen(navController: NavController) {
             modifier = Modifier
                 .padding(5.dp)
         )
-
         Row(
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.End
@@ -108,10 +117,9 @@ fun LoginScreen(navController: NavController) {
                 modifier = Modifier
                     .clickable {
                         navController.navigate(NavRoutes.screenSignup)
-//                        val intent = Intent(context, SignUpActivity::class.java)
-//                        context.startActivity(intent)
                     }
             )
+
         }
 
     }
