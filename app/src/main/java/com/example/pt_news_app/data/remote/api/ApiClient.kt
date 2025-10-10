@@ -10,7 +10,6 @@ object ApiClient {
     private const val API_KEY = "a6a1ce5e0a4b4baf9b4fb649b90d241d"
     private const val BASE_URL = "https://newsapi.org/"
 
-
     fun getInstance(): ApiService {
         if (apiService == null) {
 
