@@ -27,7 +27,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import android.widget.Toast
-import android.util.Patterns
+import androidx.compose.foundation.layout.height
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.pt_news_app.R
@@ -117,65 +117,56 @@ fun SignUpScreen(
         )
         Button(
             onClick = {
-                // Validation
-                if (firstName.isBlank() || lastName.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
-                    Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
-                    return@Button
-                }
-                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    Toast.makeText(context, "Please enter a valid email", Toast.LENGTH_SHORT).show()
-                    return@Button
-                }
-                if (password != confirmPassword) {
-                    Toast.makeText(context, "Passwords do not match", Toast.LENGTH_SHORT).show()
-                    return@Button
-                }
-
-                viewModel.submit()
-
-            }, modifier = Modifier
-                .size(100.dp, 50.dp)
-        ) {
-            Text(text = "Sign up")
-        }
-        Spacer(
+                viewModel.submit(
+                    firstName.trim(),
+                    lastName.trim(),
+                    email.trim(),
+                    password.trim(),
+                    confirmPassword.trim()
+                )
+            },
             modifier = Modifier
-                .padding(5.dp)
-        )
+                .size(width = 120.dp, height = 48.dp)
+        ) {
+            Text(text = if (uiState.isLoading) "Loading..." else "Sign Up")
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
 
         Row(
-            verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.End
-
-
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
+            Text(text = "Already have an account? ", fontSize = 14.sp)
             Text(
-                text = "Already have an account? ",
-                fontSize = 14.sp
-            )
-            Text(
-                text = "Login ",
+                text = "Login",
                 fontSize = 16.sp,
                 color = colorResource(R.color.light_blue),
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .clickable {
-                        navController.navigate(NavRoutes.screenLogin)
-                    }
+                modifier = Modifier.clickable {
+                    navController.navigate(NavRoutes.screenLogin)
+                }
             )
         }
-
     }
 
-    if (uiState.createdUser != null && uiState.error == null && !uiState.isLoading) {
-        firstName = ""
-        lastName = ""
-        email = ""
-        password = ""
-        confirmPassword = ""
-        Toast.makeText(context, "Sign up complete", Toast.LENGTH_SHORT).show()
-        navController.navigate(NavRoutes.screenLogin) {
-            popUpTo(NavRoutes.screenLogin) { inclusive = true }
+
+    when {
+        uiState.error != null -> {
+            Toast.makeText(context, uiState.error, Toast.LENGTH_SHORT).show()
+            viewModel.clearError()
+        }
+
+        uiState.createdUser != null && !uiState.isLoading -> {
+            Toast.makeText(context, "Sign up complete", Toast.LENGTH_SHORT).show()
+            firstName = ""
+            lastName = ""
+            email = ""
+            password = ""
+            confirmPassword = ""
+            navController.navigate(NavRoutes.screenLogin) {
+                popUpTo(NavRoutes.screenLogin) { inclusive = true }
+            }
         }
     }
 

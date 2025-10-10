@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pt_news_app.domain.model.User
 import com.example.pt_news_app.domain.usecase.SignUpUseCase
-import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -20,7 +19,7 @@ data class SignUpUiState(
     val isLoading: Boolean = false,
     val error: String? = ""
 )
-//@HiltAndroidApp
+
 class SignupViewModel(private val signUp: SignUpUseCase) : ViewModel() {
     private val _ui = MutableStateFlow(SignUpUiState())
     val ui: StateFlow<SignUpUiState> = _ui.asStateFlow()
@@ -31,7 +30,7 @@ class SignupViewModel(private val signUp: SignUpUseCase) : ViewModel() {
     fun onPassword(v: String) = _ui.update { it.copy(password = v, error = null) }
     fun onConfirm(v: String) = _ui.update { it.copy(confirmPassword = v, error = null) }
 
-    fun submit() {
+    fun submit(trim: String, trim1: String, trim2: String, trim3: String, trim4: String) {
         val s = _ui.value
         viewModelScope.launch {
             _ui.update { it.copy(isLoading = true, error = null) }
@@ -44,5 +43,8 @@ class SignupViewModel(private val signUp: SignUpUseCase) : ViewModel() {
                 )
             }
         }
+    }
+    fun clearError() {
+        _ui.value = _ui.value.copy(error = null)
     }
 }
