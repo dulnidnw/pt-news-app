@@ -1,6 +1,8 @@
 package com.example.pt_news_app.presentation.navigation
 
+import FavouritesScreen
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,6 +15,8 @@ import com.example.pt_news_app.presentation.ui.signup.SignUpScreen
 import com.example.pt_news_app.presentation.ui.signup.signUpVmFactory
 import com.example.pt_news_app.presentation.ui.login.LoginViewModel
 import com.example.pt_news_app.presentation.ui.login.loginVmFactory
+import com.example.pt_news_app.presentation.ui.profile.ProfileScreen
+import com.example.pt_news_app.presentation.ui.signup.SignupViewModel
 
 @Composable
 fun AppNavigation() {
@@ -27,10 +31,9 @@ fun AppNavigation() {
                 }
             })
         }
-
         composable(NavRoutes.screenSignup) {
             // Use the custom factory that wires dependencies
-            val vm = viewModel<com.example.pt_news_app.presentation.ui.signup.SignupViewModel>(
+            val vm = viewModel<SignupViewModel>(
                 factory = signUpVmFactory()
             )
             SignUpScreen(navController, vm)
@@ -39,5 +42,13 @@ fun AppNavigation() {
             val viewModel: HomeViewModel = viewModel(factory = homeVmFactory())
             HomeScreen(navController, viewModel = viewModel)
         }
+        composable(NavRoutes.screenProfile) {
+            ProfileScreen(navController)
+        }
+        composable(NavRoutes.screenFavorite) {
+            FavouritesScreen(navController)
+        }
+
+
     })
 }

@@ -7,18 +7,7 @@ import com.example.pt_news_app.domain.usecase.SignUpUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-data class SignUpUiState(
-    val firstName: String = "",
-    val lastName: String = "",
-    val email: String = "",
-    val password: String = "",
-    val confirmPassword: String = "",
 
-    val createdUser: User? = null,
-
-    val isLoading: Boolean = false,
-    val error: String? = ""
-)
 
 class SignupViewModel(private val signUp: SignUpUseCase) : ViewModel() {
     private val _ui = MutableStateFlow(SignUpUiState())

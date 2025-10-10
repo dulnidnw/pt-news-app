@@ -6,9 +6,10 @@ import retrofit2.http.Query
 
 interface ApiService {
     @GET("v2/everything")
-    suspend fun getTopHeadlines(
-        @Query("country") country: Int,
-        @Query("category") category: Int
+    suspend fun getNews(
+        @Query("q") query: String,
+        @Query("from") from: String,
+        @Query("sortBy") sortBy: String = "publishedAt"
     ): NewsResponse
 
     @GET("everything")
