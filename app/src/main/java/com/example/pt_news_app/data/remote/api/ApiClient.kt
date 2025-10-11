@@ -15,10 +15,15 @@ object ApiClient {
 
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor { chain ->
-                    val request = chain.request().newBuilder()
-                        .addHeader("Authorization", "Bearer $API_KEY")
+                    val original = chain.request()
+                    val newUrl = original.url.newBuilder()
+                        .addQueryParameter("apiKey", API_KEY)
                         .build()
-                    chain.proceed(request)
+
+                    val newRequest = original.newBuilder()
+                        .url(newUrl)
+                        .build()
+                    chain.proceed(newRequest)
                 }
                 .build()
 
