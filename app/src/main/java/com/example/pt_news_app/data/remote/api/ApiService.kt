@@ -19,8 +19,8 @@ interface ApiService {
         @Query("sortBy") sortBy: String = "publishedAt"
     ): NewsResponse
 
-    @GET("everything")
-    suspend fun searchNews(
+    @GET("v2/everything")
+    suspend fun getNewsFeed(
         @Query("q") query: String
     ): NewsResponse
 }
