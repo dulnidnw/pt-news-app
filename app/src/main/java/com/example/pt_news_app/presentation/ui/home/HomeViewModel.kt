@@ -11,7 +11,6 @@ class HomeViewModel(private val repo: GetNewsUseCase) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState
-    private val apiKey = "a6a1ce5e0a4b4baf9b4fb649b90d241d"
     fun loadNews(query: String? = null) {
         val currentState = _uiState.value
         _uiState.value = HomeUiState(isLoading = true)
@@ -34,7 +33,7 @@ class HomeViewModel(private val repo: GetNewsUseCase) : ViewModel() {
         }
     }
 
-    suspend fun loadNeesFeed(category: String) {
+    suspend fun loadNewsFeed(category: String) {
         val resultNewsFeed = repo.getNewsByCategory(category)
         _uiState.value = if (resultNewsFeed.isSuccess) {
             _uiState.value.copy(
