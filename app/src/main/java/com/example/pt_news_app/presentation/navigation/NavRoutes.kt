@@ -6,4 +6,5 @@ object NavRoutes {
     var screenHome = "screen_home"
     var screenFavorite = "screen_favorite"
     var screenProfile = "screen_profile"
+    var screenSeeAll = "screen_see_all"
 }

@@ -1,7 +1,6 @@
-package com.example.pt_news_app.presentation.ui.NewsDetail
+package com.example.pt_news_app.presentation.ui.newsDetail
 
 import android.R
-import android.R.attr.subtitle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +33,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 @Composable
 fun DetailScreen(

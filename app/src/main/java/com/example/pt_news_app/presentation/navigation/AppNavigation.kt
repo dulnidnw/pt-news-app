@@ -2,11 +2,11 @@ package com.example.pt_news_app.presentation.navigation
 
 import FavouritesScreen
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.pt_news_app.presentation.ui.SeeAll.SeeAllScreen
 import com.example.pt_news_app.presentation.ui.home.HomeScreen
 import com.example.pt_news_app.presentation.ui.home.HomeViewModel
 import com.example.pt_news_app.presentation.ui.home.homeVmFactory
@@ -47,6 +47,11 @@ fun AppNavigation() {
         }
         composable(NavRoutes.screenFavorite) {
             FavouritesScreen(navController)
+        }
+        composable(NavRoutes.screenSeeAll) {
+
+            val viewModel: HomeViewModel = viewModel(factory = homeVmFactory())
+            SeeAllScreen(navController, viewModel = viewModel)
         }
 
 

@@ -1,12 +1,9 @@
-package com.example.pt_news_app.presentation.ui.home
+package com.example.pt_news_app.presentation.ui.SeeAll
 
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,9 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -58,16 +52,18 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.bumptech.glide.Glide
 import com.example.pt_news_app.presentation.navigation.NavRoutes
+import com.example.pt_news_app.presentation.ui.home.HomeViewModel
+import com.example.pt_news_app.presentation.ui.home.NewsCardVertical
+import com.example.pt_news_app.presentation.ui.home.SearchBar
 import com.example.pt_news_app.presentation.ui.profile.BottomNavBar
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController, viewModel: HomeViewModel) {
+fun SeeAllScreen(navController: NavController, viewModel: HomeViewModel) {
 
     val state by viewModel.uiState.collectAsState()
     var selectedCategory by remember { mutableStateOf("Business") }
-    val scope = rememberCoroutineScope()
+    rememberCoroutineScope()
 
     val imageUrl: String = ""
 
@@ -81,9 +77,11 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel) {
         viewModel.loadNewsFeed(selectedCategory)
     }
 
+
+
     Scaffold(
         bottomBar = { BottomNavBar(navController) },
-        containerColor = Color(0xFFF9F9F9)
+        containerColor = Color(0xFFF9F9F9),
     ) { innerPadding ->
 
         Column(
@@ -104,65 +102,17 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    "Latest News",
+                    "About 1060 results for Sri lanka",
                     style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
                 )
-                Text("See All ➜", color = Color.Gray, fontSize = 14.sp,
-                    modifier = Modifier.
-                    clickable{
-                        navController.navigate(NavRoutes.screenSeeAll)
-                    }
-                )
+
             }
 
             Spacer(Modifier.height(16.dp))
 
-            // Horizontal top headlines
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                items(state.articles.take(5)) { article ->
-                    NewsCardHorizontal(
-                        title = article.title,
-                        description = article.description ?: "",
-                        imageUrl = article.urlToImage ?: ""
-                    )
-                }
-            }
-
-            Spacer(Modifier.height(24.dp))
-
-            // Category Chips
-            val categories = listOf(
-                "Business",
-                "Entertainment",
-                "General",
-                "Health",
-                "Science",
-                "Sports",
-                "Technology"
-            )
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                items(categories) { category ->
-                    CategoryChip(
-                        category = category,
-                        selected = category == selectedCategory,
-                        onClick = {
-                            selectedCategory = category
-                            scope.launch {
-                                viewModel.loadNewsFeed(category)
-                            }
-                        }
-                    )
-                }
-            }
-
-            Spacer(Modifier.height(24.dp))
-
             state.articles.drop(5).forEach { article ->
                 NewsCardVertical(
-                    title = article.title,
+                    title = article.title ?: "",
                     imageUrl = article.urlToImage ?: ""
                 )
 
@@ -171,6 +121,7 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel) {
 
         }
     }
+
 }
 
 @Composable
@@ -201,105 +152,6 @@ fun SearchBar(onSearch: (String) -> Unit) {
     )
 }
 
-@Composable
-fun NewsCardHorizontal(title: String, description: String, imageUrl: String) {
-    Card(
-        modifier = Modifier
-            .width(280.dp)
-            .height(180.dp),
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Box {
-            val context = LocalContext.current
-
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    // --- Load image using Glide ---
-                    AndroidView(
-                        factory = { ctx ->
-                            ImageView(ctx).apply {
-                                layoutParams = ViewGroup.LayoutParams(
-                                    ViewGroup.LayoutParams.MATCH_PARENT,
-                                    ViewGroup.LayoutParams.MATCH_PARENT
-                                )
-                                scaleType = ImageView.ScaleType.CENTER_CROP
-                            }
-                        },
-                        update = { imageView ->
-                            Glide.with(context)
-                                .load(imageUrl)
-                                .placeholder(android.R.drawable.progress_indeterminate_horizontal)
-                                .error(android.R.drawable.stat_notify_error)
-                                .into(imageView)
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp)
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(text = title)
-                }
-            }
-
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            listOf(Color.Transparent, Color.Black.copy(alpha = 0.6f))
-                        )
-                    )
-            )
-
-            Column(
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(16.dp)
-            ) {
-                Text(
-                    text = title,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
-                )
-                Text(
-                    text = description,
-                    color = Color.White.copy(alpha = 0.8f),
-                    fontSize = 12.sp
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun CategoryChip(category: String, selected: Boolean, onClick: () -> Unit) {
-    Box(
-
-        modifier = Modifier
-            .clickable { onClick() }
-            .clip(RoundedCornerShape(50))
-            .background(if (selected) Color(0xFF00B4D8) else Color.White)
-            .border(
-                BorderStroke(1.dp, if (selected) Color.Transparent else Color(0xFFDADADA)),
-                RoundedCornerShape(50)
-            )
-            .clickable { onClick() }
-            .padding(horizontal = 20.dp, vertical = 10.dp)
-    ) {
-        Text(
-            category,
-            color = if (selected) Color.White else Color.Black,
-            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
-        )
-    }
-}
 
 @Composable
 fun NewsCardVertical(title: String, imageUrl: String) {

@@ -89,6 +89,8 @@ dependencies {
     // Image Loading
     implementation(libs.coil)
     implementation(libs.coil.compose)
+    implementation(libs.glide)
+    ksp(libs.glide.compiler)
 
     // Dependency Injection
     implementation(libs.dagger)
