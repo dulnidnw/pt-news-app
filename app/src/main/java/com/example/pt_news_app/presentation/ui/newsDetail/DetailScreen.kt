@@ -1,6 +1,7 @@
 package com.example.pt_news_app.presentation.ui.newsDetail
 
 import android.R
+import android.R.attr.subtitle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,16 +37,17 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun DetailScreen(
-    title: String = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore",
-    subtitle: String = "magna lobortis",
-    body: String = """
-        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-        
-        Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
-        
-        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-    """.trimIndent(),
-    onBackClick: () -> Unit = {}
+    title: String, subtitle: String, description: String, imageUrl: String
+//    title: String = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore",
+//    subtitle: String = "magna lobortis",
+//    body: String = """
+//        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+//
+//        Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
+//
+//        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+//    """.trimIndent(),
+//    onBackClick: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
     Box(modifier = Modifier.fillMaxSize()) {
@@ -53,12 +55,12 @@ fun DetailScreen(
             modifier = Modifier
                 .size(100.dp)
                 .align(Alignment.TopCenter)
-                .offset(y =60.dp)
+                .offset(y = 60.dp)
                 .background(color = colorResource(R.color.background_light))
         )
 
         IconButton(
-         onClick = onBackClick,
+            onClick = { /* TODO */ },
             modifier = Modifier
                 .padding(16.dp)
                 .background(Color(0xFF4CC9F0), CircleShape)
@@ -98,7 +100,7 @@ fun DetailScreen(
 
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = body,
+                text = "body",
                 fontSize = 16.sp,
                 color = Color.Black,
                 lineHeight = 22.sp

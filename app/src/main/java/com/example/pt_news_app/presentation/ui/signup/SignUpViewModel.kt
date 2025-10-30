@@ -2,14 +2,13 @@ package com.example.pt_news_app.presentation.ui.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pt_news_app.domain.model.User
-import com.example.pt_news_app.domain.usecase.SignUpUseCase
+import com.example.pt_news_app.domain.usecase.CreateUserUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 
 
-class SignupViewModel(private val signUp: SignUpUseCase) : ViewModel() {
+class SignupViewModel(private val signUp: CreateUserUseCase) : ViewModel() {
     private val _ui = MutableStateFlow(SignUpUiState())
     val ui: StateFlow<SignUpUiState> = _ui.asStateFlow()
 

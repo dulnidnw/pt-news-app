@@ -5,7 +5,7 @@ import com.example.pt_news_app.domain.model.User
 import com.example.pt_news_app.domain.repository.UserRepository
 import java.security.MessageDigest
 
-class SignUpUseCase(private val repo: UserRepository) {
+class CreateUserUseCase(private val repo: UserRepository) {
 
     suspend operator fun invoke(
         firstname: String,

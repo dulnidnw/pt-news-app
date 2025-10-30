@@ -1,6 +1,7 @@
 package com.example.pt_news_app.presentation.ui.seeAll
 
 import android.util.Log
+import android.util.Log.e
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.compose.foundation.background
@@ -169,8 +170,6 @@ fun SearchBar(onSearch: (String) -> Unit, viewModel: SearchViewModel = viewModel
     }
 }
 
-
-
 @Composable
 fun NewsCardVertical(title: String, imageUrl: String) {
     Card(
@@ -199,12 +198,16 @@ fun NewsCardVertical(title: String, imageUrl: String) {
                             }
                         },
                         update = { imageView ->
+                            try {
+                                Glide.with(imageView.context)
+                                    .load(imageUrl)
+                                    .placeholder(android.R.drawable.progress_indeterminate_horizontal)
+                                    .error(android.R.drawable.stat_notify_error)
+                                    .into(imageView)
+                            } catch (e: Exception) {
+                                println("An unexpected error occurred: ${e.message}")
+                            }
 
-                            Glide.with(imageView.context)
-                                .load(imageUrl)
-                                .placeholder(android.R.drawable.progress_indeterminate_horizontal)
-                                .error(android.R.drawable.stat_notify_error)
-                                .into(imageView)
                         },
                         modifier = Modifier
                             .fillMaxWidth()

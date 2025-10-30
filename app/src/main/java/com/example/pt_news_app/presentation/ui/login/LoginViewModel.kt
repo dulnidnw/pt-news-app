@@ -11,18 +11,21 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
-class LoginViewModel(private val login: LoginUserUseCase) : ViewModel() {
+class LoginViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewModel() {
     private val _ui = MutableStateFlow(LoginUiState())
     val ui: StateFlow<LoginUiState> = _ui.asStateFlow()
 
     fun onEmail(v: String) = _ui.update { it.copy(email = v, error = null) }
     fun onPassword(v: String) = _ui.update { it.copy(password = v, error = null) }
 
-    fun submit() {
+    private val _loginSuccess = MutableStateFlow(false)
+    val loginSuccess: StateFlow<Boolean> = _loginSuccess
+
+    fun loginUser(email: String, password: String) {
         val s = _ui.value
         viewModelScope.launch {
             _ui.update { it.copy(isLoading = true, error = null) }
-            val result = login( s.email, s.password)
+            val result = loginUserUseCase( s.email, s.password)
             _ui.update {
                 it.copy(
                     isLoading = false,
@@ -32,4 +35,10 @@ class LoginViewModel(private val login: LoginUserUseCase) : ViewModel() {
             }
         }
     }
+
+//    fun loginUser(email: String, password: String) {
+//        viewModelScope.launch {
+//            _loginSuccess.value = loginUserUseCase(email, password)
+//        }
+//    }
 }

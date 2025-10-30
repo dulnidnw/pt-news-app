@@ -104,9 +104,9 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel) {
                     "Latest News",
                     style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
                 )
-                Text("See All ➜", color = Color.Gray, fontSize = 14.sp,
-                    modifier = Modifier.
-                    clickable{
+                Text(
+                    "See All ➜", color = Color.Gray, fontSize = 14.sp,
+                    modifier = Modifier.clickable {
                         navController.navigate(NavRoutes.screenSeeAll)
                     }
                 )
@@ -119,8 +119,16 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel) {
                 items(state.articles.take(5)) { article ->
                     NewsCardHorizontal(
                         title = article.title,
+                        subtitle = article.description ?: "",
                         description = article.description ?: "",
-                        imageUrl = article.urlToImage ?: ""
+                        imageUrl = article.urlToImage ?: "",
+                        onClick = {
+//                            navController.currentBackStackEntry?.arguments?.putParcelable("article", article)
+//                            navController.navigate("details")
+                            navController.navigate(
+                                "details/${article.title}/${article.description}/${article.description}/${article.urlToImage}"
+                            )
+                        }
                     )
                 }
             }
@@ -198,7 +206,10 @@ fun SearchBar(onSearch: (String) -> Unit) {
 }
 
 @Composable
-fun NewsCardHorizontal(title: String, description: String, imageUrl: String) {
+fun NewsCardHorizontal(
+    title: String, subtitle: String, description: String, imageUrl: String,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .width(280.dp)
@@ -211,6 +222,7 @@ fun NewsCardHorizontal(title: String, description: String, imageUrl: String) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clickable { onClick() }
                     .padding(horizontal = 16.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {

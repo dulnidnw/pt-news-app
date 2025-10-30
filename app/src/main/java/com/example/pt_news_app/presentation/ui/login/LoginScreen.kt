@@ -81,6 +81,7 @@ fun LoginScreen(
         Button(
             onClick = {
                 if (email.isNotBlank() && password.isNotBlank()) {
+                    viewModel.loginUser(email, password)
                     onLoginSuccess()
                 } else {
                     Toast.makeText(

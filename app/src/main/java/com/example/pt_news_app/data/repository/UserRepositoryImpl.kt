@@ -58,4 +58,24 @@ class UserRepositoryImpl(private val dao: UserDao) : UserRepository {
             )
         }
     }
+
+//    override suspend fun createUser(user: User) {
+//        TODO("Not yet implemented")
+//    }
+
+    override suspend fun getUserByEmail(email: String): User? {
+        val entity = dao.getUserByEmail(email) ?: return null
+        return User(entity.id, firstName = entity.firstName,lastName = entity.lastName, email = entity.email, password = entity.password)
+    }
+    override suspend fun getAllUsers(): List<User> {
+        return dao.getAllUsers().map { User(it.id,  firstName = it.firstName,lastName = it.lastName, email = it.email, password = it.password) }
+    }
+
+    override suspend fun updateUser(user: User) {
+        dao.update(UserEntity(user.id, firstName = user.firstName,lastName = user.lastName, email = user.email, password = user.password))
+    }
+
+    override suspend fun deleteUser(user: User) {
+        dao.delete(UserEntity(user.id, firstName = user.firstName,lastName = user.lastName, email = user.email, password = user.password))
+    }
 }
