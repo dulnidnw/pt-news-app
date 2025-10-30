@@ -2,12 +2,12 @@ package com.example.pt_news_app.presentation.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pt_news_app.domain.usecase.GetNewsUseCase
+import com.example.pt_news_app.domain.usecase.LoadNewsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 
-class HomeViewModel(private val repo: GetNewsUseCase) : ViewModel() {
+class HomeViewModel(private val repo: LoadNewsUseCase) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState

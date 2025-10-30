@@ -1,4 +1,4 @@
-package com.example.pt_news_app.data.mapper
+package com.example.pt_news_app.domain.mapper
 
 import com.example.pt_news_app.data.local.entity.UserEntity
 

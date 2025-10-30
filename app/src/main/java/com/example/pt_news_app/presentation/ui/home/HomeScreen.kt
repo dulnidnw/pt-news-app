@@ -74,13 +74,10 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel) {
     LaunchedEffect(imageUrl) {
         Log.d("NewsCardHorizontal", "Loading image: $imageUrl")
     }
-
-
     LaunchedEffect(Unit) {
         viewModel.loadNews()
         viewModel.loadNewsFeed(selectedCategory)
     }
-
     Scaffold(
         bottomBar = { BottomNavBar(navController) },
         containerColor = Color(0xFFF9F9F9)
@@ -157,7 +154,6 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel) {
                     )
                 }
             }
-
             Spacer(Modifier.height(24.dp))
 
             state.articles.drop(5).forEach { article ->

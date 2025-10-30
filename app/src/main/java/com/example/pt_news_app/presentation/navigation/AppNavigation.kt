@@ -6,16 +6,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.pt_news_app.presentation.ui.SeeAll.SeeAllScreen
+import com.example.pt_news_app.presentation.ui.seeAll.SeeAllScreen
 import com.example.pt_news_app.presentation.ui.home.HomeScreen
 import com.example.pt_news_app.presentation.ui.home.HomeViewModel
-import com.example.pt_news_app.presentation.ui.home.homeVmFactory
+import com.example.pt_news_app.presentation.ui.home.HomeVmFactory
 import com.example.pt_news_app.presentation.ui.login.LoginScreen
 import com.example.pt_news_app.presentation.ui.signup.SignUpScreen
 import com.example.pt_news_app.presentation.ui.signup.signUpVmFactory
 import com.example.pt_news_app.presentation.ui.login.LoginViewModel
 import com.example.pt_news_app.presentation.ui.login.loginVmFactory
 import com.example.pt_news_app.presentation.ui.profile.ProfileScreen
+import com.example.pt_news_app.presentation.ui.seeAll.SearchViewModel
+import com.example.pt_news_app.presentation.ui.seeAll.SearchVmFactory
 import com.example.pt_news_app.presentation.ui.signup.SignupViewModel
 
 @Composable
@@ -39,7 +41,7 @@ fun AppNavigation() {
             SignUpScreen(navController, vm)
         }
         composable(NavRoutes.screenHome) {
-            val viewModel: HomeViewModel = viewModel(factory = homeVmFactory())
+            val viewModel: HomeViewModel = viewModel(factory = HomeVmFactory())
             HomeScreen(navController, viewModel = viewModel)
         }
         composable(NavRoutes.screenProfile) {
@@ -50,7 +52,7 @@ fun AppNavigation() {
         }
         composable(NavRoutes.screenSeeAll) {
 
-            val viewModel: HomeViewModel = viewModel(factory = homeVmFactory())
+            val viewModel: SearchViewModel = viewModel(factory = SearchVmFactory())
             SeeAllScreen(navController, viewModel = viewModel)
         }
 

@@ -9,4 +9,5 @@ import com.example.pt_news_app.domain.model.User
 interface NewsRepository {
     suspend fun getTopHeadlines(country: String, category: String): Result<List<Article>>
     suspend fun getNewsFeed(q: String): Result<List<Article>>
+    suspend fun getFilterNewsFeed(): Result<List<Article>>
 }

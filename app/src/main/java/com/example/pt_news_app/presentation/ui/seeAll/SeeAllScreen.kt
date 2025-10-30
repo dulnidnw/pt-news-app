@@ -1,4 +1,4 @@
-package com.example.pt_news_app.presentation.ui.SeeAll
+package com.example.pt_news_app.presentation.ui.seeAll
 
 import android.util.Log
 import android.view.ViewGroup
@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -49,17 +51,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.Glide
 import com.example.pt_news_app.presentation.navigation.NavRoutes
-import com.example.pt_news_app.presentation.ui.home.HomeViewModel
-import com.example.pt_news_app.presentation.ui.home.NewsCardVertical
-import com.example.pt_news_app.presentation.ui.home.SearchBar
-import com.example.pt_news_app.presentation.ui.profile.BottomNavBar
+import com.example.pt_news_app.presentation.ui.seeAll.SearchBar
+import com.example.pt_news_app.presentation.ui.seeAll.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SeeAllScreen(navController: NavController, viewModel: HomeViewModel) {
+fun SeeAllScreen(navController: NavController, viewModel: SearchViewModel) {
 
     val state by viewModel.uiState.collectAsState()
     var selectedCategory by remember { mutableStateOf("Business") }
@@ -74,7 +75,6 @@ fun SeeAllScreen(navController: NavController, viewModel: HomeViewModel) {
 
     LaunchedEffect(Unit) {
         viewModel.loadNews()
-        viewModel.loadNewsFeed(selectedCategory)
     }
 
 
@@ -88,12 +88,15 @@ fun SeeAllScreen(navController: NavController, viewModel: HomeViewModel) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
+//                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp)
         ) {
 
             Spacer(Modifier.height(8.dp))
-            SearchBar(onSearch = {})
+
+            SearchBar(onSearch = { query ->
+                viewModel.filterNews(query) // or call API-based search here
+            })
 
             Spacer(Modifier.height(24.dp))
             Row(
@@ -101,10 +104,6 @@ fun SeeAllScreen(navController: NavController, viewModel: HomeViewModel) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    "About 1060 results for Sri lanka",
-                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
-                )
 
             }
 
@@ -125,13 +124,16 @@ fun SeeAllScreen(navController: NavController, viewModel: HomeViewModel) {
 }
 
 @Composable
-fun SearchBar(onSearch: (String) -> Unit) {
-    var text by remember { mutableStateOf("") }
+fun SearchBar(onSearch: (String) -> Unit, viewModel: SearchViewModel = viewModel()) {
+    var searchQuery by remember { mutableStateOf("") }
+    val state by viewModel.uiState.collectAsState()
 
     OutlinedTextField(
-        value = text,
-        onValueChange = { text = it },
-        placeholder = { Text("Search") },
+        value = searchQuery,
+        onValueChange = {
+            searchQuery = it
+            viewModel.filterNews(it)  // filter on typing
+        }, placeholder = { Text("Search") },
         leadingIcon = {
             Icon(
                 Icons.Default.Search,
@@ -140,6 +142,7 @@ fun SearchBar(onSearch: (String) -> Unit) {
             )
         },
         shape = RoundedCornerShape(50),
+        label = { Text("Search by title") },
         modifier = Modifier
             .fillMaxWidth()
             .height(52.dp),
@@ -150,7 +153,22 @@ fun SearchBar(onSearch: (String) -> Unit) {
             focusedContainerColor = Color(0xFFF2F2F2)
         )
     )
+
+    LazyColumn {
+        item {
+            Text(
+                "About 1060 results for Sri lanka",
+                modifier = Modifier.padding(12.dp),
+                style = MaterialTheme.typography.titleLarge
+            )
+        }
+
+        items(state.filteredArticles) { article ->
+            NewsArticleItem(article)
+        }
+    }
 }
+
 
 
 @Composable
@@ -170,7 +188,6 @@ fun NewsCardVertical(title: String, imageUrl: String) {
                     .padding(horizontal = 16.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    // --- Load image using Glide ---
                     AndroidView(
                         factory = { ctx ->
                             ImageView(ctx).apply {
@@ -182,7 +199,8 @@ fun NewsCardVertical(title: String, imageUrl: String) {
                             }
                         },
                         update = { imageView ->
-                            Glide.with(context)
+
+                            Glide.with(imageView.context)
                                 .load(imageUrl)
                                 .placeholder(android.R.drawable.progress_indeterminate_horizontal)
                                 .error(android.R.drawable.stat_notify_error)
