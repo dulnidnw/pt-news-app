@@ -10,24 +10,25 @@ appcompat = "1.7.1"
 material = "1.13.0"
 lifecycleRuntimeKtx = "2.9.4"
 activityCompose = "1.11.0"
-composeBom = "2025.09.01"
+composeBom = "2025.10.01"
 navigationCompose = "2.9.5"
 navigationFragment = "2.9.5"
 navigationUi = "2.9.5"
-room = "2.8.2"
+room = "2.8.3"
 compose-material = "1.7.8"
 
 # Networking
-okhttp = "4.12.0"
-retrofit = "2.9.0"
-gson = "2.10.1"
+okhttp = "5.2.1"
+retrofit = "3.0.0"
+gson = "2.13.2"
 
 # Image Loading
 coil = "3.3.0"
+glide = "5.0.5"
 
 # Dependency Injection
-dagger = "2.50"
-hilt = "2.50"
+dagger = "2.57.2"
+hilt = "2.57.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -73,6 +74,8 @@ gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 # Image Loading
 coil = { group = "io.coil-kt.coil3", name = "coil", version.ref = "coil" }
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
 
 # Dependency Injection
 dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
