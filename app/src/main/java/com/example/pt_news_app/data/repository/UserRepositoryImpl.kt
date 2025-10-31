@@ -59,10 +59,6 @@ class UserRepositoryImpl(private val dao: UserDao) : UserRepository {
         }
     }
 
-//    override suspend fun createUser(user: User) {
-//        TODO("Not yet implemented")
-//    }
-
     override suspend fun getUserByEmail(email: String): User? {
         val entity = dao.getUserByEmail(email) ?: return null
         return User(entity.id, firstName = entity.firstName,lastName = entity.lastName, email = entity.email, password = entity.password)

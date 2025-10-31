@@ -1,7 +1,6 @@
 package com.example.pt_news_app.presentation.ui.seeAll
 
 import android.util.Log
-import android.util.Log.e
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.compose.foundation.background
@@ -16,9 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
@@ -56,8 +53,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.Glide
 import com.example.pt_news_app.presentation.navigation.NavRoutes
-import com.example.pt_news_app.presentation.ui.seeAll.SearchBar
-import com.example.pt_news_app.presentation.ui.seeAll.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -192,7 +187,7 @@ fun NewsCardVertical(title: String, imageUrl: String) {
                             ImageView(ctx).apply {
                                 layoutParams = ViewGroup.LayoutParams(
                                     ViewGroup.LayoutParams.MATCH_PARENT,
-                                    400  // adjust height as you need
+                                    400
                                 )
                                 scaleType = ImageView.ScaleType.CENTER_CROP
                             }

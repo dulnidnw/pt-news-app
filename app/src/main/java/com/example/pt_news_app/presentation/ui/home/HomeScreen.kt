@@ -114,7 +114,6 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel) {
 
             Spacer(Modifier.height(16.dp))
 
-            // Horizontal top headlines
             LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 items(state.articles.take(5)) { article ->
                     NewsCardHorizontal(
@@ -135,7 +134,6 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel) {
 
             Spacer(Modifier.height(24.dp))
 
-            // Category Chips
             val categories = listOf(
                 "Business",
                 "Entertainment",
@@ -326,13 +324,13 @@ fun NewsCardVertical(title: String, imageUrl: String) {
                     .padding(horizontal = 16.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    // --- Load image using Glide ---
+
                     AndroidView(
                         factory = { ctx ->
                             ImageView(ctx).apply {
                                 layoutParams = ViewGroup.LayoutParams(
                                     ViewGroup.LayoutParams.MATCH_PARENT,
-                                    400  // adjust height as you need
+                                    400
                                 )
                                 scaleType = ImageView.ScaleType.CENTER_CROP
                             }

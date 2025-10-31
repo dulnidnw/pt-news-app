@@ -1,7 +1,6 @@
 package com.example.pt_news_app.presentation.ui.newsDetail
 
 import android.R
-import android.R.attr.subtitle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -80,7 +79,7 @@ fun DetailScreen(
             .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
             .background(Color.White)
     ) {
-        // Floating text card
+
         Card(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
