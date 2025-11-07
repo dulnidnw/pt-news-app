@@ -10,15 +10,18 @@ appcompat = "1.7.1"
 material = "1.13.0"
 lifecycleRuntimeKtx = "2.9.4"
 activityCompose = "1.11.0"
-composeBom = "2025.10.01"
-navigationCompose = "2.9.5"
-navigationFragment = "2.9.5"
-navigationUi = "2.9.5"
+composeBom = "2025.11.00"
+navigationCompose = "2.9.6"
+navigationFragment = "2.9.6"
+navigationUi = "2.9.6"
 room = "2.8.3"
 compose-material = "1.7.8"
 
+# DataStore
+datastore = "1.1.1"
+
 # Networking
-okhttp = "5.2.1"
+okhttp = "5.3.0"
 retrofit = "3.0.0"
 gson = "2.13.2"
 
@@ -29,6 +32,8 @@ glide = "5.0.5"
 # Dependency Injection
 dagger = "2.57.2"
 hilt = "2.57.2"
+
+kotlinxSerialization = "1.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -64,12 +69,17 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
 room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 
+# DataStore
+datastorePreferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+
 # Networking
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-gson-converter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+
 
 # Image Loading
 coil = { group = "io.coil-kt.coil3", name = "coil", version.ref = "coil" }
@@ -82,7 +92,7 @@ dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" 
 dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.2.0" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.3.0" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -90,3 +100,5 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
