@@ -26,17 +26,25 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.pt_news_app.presentation.navigation.NavRoutes
+import androidx.compose.runtime.*
 
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun ProfileScreen(
+    navController: NavController,
+    viewModel: ProfileViewModel = viewModel(factory = profileVmFactory())
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    val user = uiState.user
     val lightGray = Color(0xFFF5F5F5)
     val accentBlue = Color(0xFF4CC9F0)
 
@@ -46,7 +54,7 @@ fun ProfileScreen(navController: NavController) {
         },
         containerColor = lightGray
     ) { padding ->
-        Column (
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
@@ -64,7 +72,7 @@ fun ProfileScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Profile Image Placeholder
+
             Box(
                 modifier = Modifier
                     .size(120.dp)
@@ -81,9 +89,17 @@ fun ProfileScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            ProfileTextField(label = "First Name", value = "John")
-            ProfileTextField(label = "Last Name", value = "Doe")
-            ProfileTextField(label = "Email", value = "youremail@gmail.com")
+            if (uiState.isLoading) {
+                Text("Loading...", color = Color.Gray)
+            } else if (uiState.error != null) {
+                Text(uiState.error ?: "Error", color = Color.Red)
+            } else if (user != null) {
+                ProfileTextField(label = "First Name", value = user.firstName)
+                ProfileTextField(label = "Last Name", value = user.lastName)
+                ProfileTextField(label = "Email", value = user.email)
+            } else {
+                Text("No user found", color = Color.Red)
+            }
         }
     }
 }

@@ -9,18 +9,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class UserRepositoryImpl(private val dao: UserDao) : UserRepository {
-    suspend fun registeruser(fName: String, user: UserEntity): Boolean {
-        return if (dao.isUserExists(user.email) == 0) {
-            dao.registerUser(user)
-            true
-        } else {
-            false
-        }
-    }
-
-    fun loginUser(username: String, password: String): UserEntity? {
-        return dao.loginUser(username, password)
-    }
 
     override suspend fun create(
         firstName: String,

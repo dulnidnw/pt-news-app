@@ -2,10 +2,13 @@ package com.example.pt_news_app.presentation.navigation
 
 import FavouritesScreen
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.pt_news_app.data.remote.dto.Article
 import com.example.pt_news_app.presentation.ui.home.HomeScreen
 import com.example.pt_news_app.presentation.ui.home.HomeViewModel
@@ -21,6 +24,9 @@ import com.example.pt_news_app.presentation.ui.seeAll.SeeAllScreen
 import com.example.pt_news_app.presentation.ui.signup.SignUpScreen
 import com.example.pt_news_app.presentation.ui.signup.SignupViewModel
 import com.example.pt_news_app.presentation.ui.signup.signUpVmFactory
+import com.google.gson.Gson
+import kotlin.String
+import kotlin.jvm.java
 
 @Composable
 fun AppNavigation() {
@@ -28,7 +34,8 @@ fun AppNavigation() {
 
     NavHost(navController = navController, startDestination = NavRoutes.screenLogin, builder = {
         composable(NavRoutes.screenLogin) {
-            val viewModel: LoginViewModel = viewModel(factory = loginVmFactory())
+            val context = LocalContext.current
+            val viewModel: LoginViewModel = viewModel(factory = loginVmFactory(context))
             LoginScreen(navController, viewModel = viewModel, onLoginSuccess = {
                 navController.navigate(NavRoutes.screenHome) {
                     popUpTo(NavRoutes.screenLogin) { inclusive = true }
@@ -57,18 +64,31 @@ fun AppNavigation() {
             SeeAllScreen(navController, viewModel = viewModel)
         }
 
-        composable(NavRoutes.screenNewsDetails) { backStackEntry ->
-            val savedStateHandle = backStackEntry.savedStateHandle
-            val article = savedStateHandle.get<Article>("article")
-            article?.let {
-                val title = backStackEntry.arguments?.getString("title") ?: ""
-                val subtitle = backStackEntry.arguments?.getString("subtitle") ?: ""
-                val description = backStackEntry.arguments?.getString("description") ?: ""
-                val imageUrl = backStackEntry.arguments?.getString("imageUrl") ?: ""
-                DetailScreen(title, subtitle, description, imageUrl)
-
-            }
+        composable(
+            route = "${NavRoutes.screenNewsDetails}/{article}",
+            arguments = listOf(navArgument("article") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val articleJson = backStackEntry.arguments?.getString("article")
+            val article = Gson().fromJson(articleJson, Article::class.java)
+            DetailScreen(
+                article.title,
+                article.author ?: "",
+                article.description ?: "",
+                article.urlToImage ?: "",
+                article.author ?: "",
+                article.formattedDateTime ?: "",
+                article.content ?: ""
+            )
         }
+
+//        composable(
+//            route = "detailScreen/{articles}",
+//            arguments = listOf(navArgument("articles") { type = NavType.StringType })
+//        ) { backStackEntry ->
+//            val json = backStackEntry.arguments?.getString("articles")
+//            val articles: List<Article> = Gson().fromJson(json, Array<Article>::class.java).toList()
+//            DetailScreen(articles)
+//        }
 
     })
 }

@@ -1,5 +1,6 @@
 package com.example.pt_news_app.presentation.ui.home
 
+import android.net.Uri
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -59,6 +60,7 @@ import androidx.navigation.NavController
 import com.bumptech.glide.Glide
 import com.example.pt_news_app.presentation.navigation.NavRoutes
 import com.example.pt_news_app.presentation.ui.profile.BottomNavBar
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -121,12 +123,14 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel) {
                         subtitle = article.description ?: "",
                         description = article.description ?: "",
                         imageUrl = article.urlToImage ?: "",
+                        author = article.author ?: "",
+                        publishAt = article.formattedDateTime ?: "",
+                        content = article.content ?: "",
                         onClick = {
-//                            navController.currentBackStackEntry?.arguments?.putParcelable("article", article)
-//                            navController.navigate("details")
-                            navController.navigate(
-                                "details/${article.title}/${article.description}/${article.description}/${article.urlToImage}"
-                            )
+
+                            val articleJson = Uri.encode(Gson().toJson(article))
+                            navController.navigate("${NavRoutes.screenNewsDetails}/$articleJson")
+
                         }
                     )
                 }
@@ -165,7 +169,18 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel) {
             state.articles.drop(5).forEach { article ->
                 NewsCardVertical(
                     title = article.title,
-                    imageUrl = article.urlToImage ?: ""
+                    subtitle = article.description ?: "",
+                    description = article.description ?: "",
+                    imageUrl = article.urlToImage ?: "",
+                    author = article.author ?: "",
+                    publishAt = article.formattedDateTime ?: "",
+                    content = article.content ?: "",
+                    onClick = {
+
+                        val articleJson = Uri.encode(Gson().toJson(article))
+                        navController.navigate("${NavRoutes.screenNewsDetails}/$articleJson")
+
+                    }
                 )
 
                 Spacer(Modifier.height(16.dp))
@@ -206,6 +221,9 @@ fun SearchBar(onSearch: (String) -> Unit) {
 @Composable
 fun NewsCardHorizontal(
     title: String, subtitle: String, description: String, imageUrl: String,
+    author: String,
+    publishAt: String,
+    content: String,
     onClick: () -> Unit
 ) {
     Card(
@@ -308,7 +326,16 @@ fun CategoryChip(category: String, selected: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-fun NewsCardVertical(title: String, imageUrl: String) {
+fun NewsCardVertical(
+    title: String,
+    subtitle: String,
+    description: String,
+    imageUrl: String,
+    author: String,
+    publishAt: String,
+    content: String,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
